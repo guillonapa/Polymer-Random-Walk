@@ -36,4 +36,4 @@ The output will be saved to the specified files.
 
 Images can be generated using the coordinates of all the monomers in the polymer. Here is a screenshot of an animation that shows the growth of a flexible polymer, following its characteristic random walk.
 
-[picture](random-walk-simulation.png)
+![picture](random-walk-simulation.png)
