@@ -3,9 +3,8 @@ import java.util.Scanner;
 
 import org.apache.commons.math3.linear.*;
 
-//For End to end circle, final positions.
-
 public class Polymer {
+
 	//FIELDS
 
 	private Monomer root;
@@ -150,12 +149,12 @@ public class Polymer {
 		boolean posY = true;
 		boolean negX = true;
 		boolean negY = true;
-		
+
 		boolean canAddMonomer = true;
 		int totalCount = 0;
-		
+
 		while (canAddMonomer == true && totalCount < 1000) {
-			
+
 			totalCount++;
 			System.out.println("total count is "+totalCount);
 			//First I calculate the starting point (potX, potY)
@@ -199,7 +198,7 @@ public class Polymer {
 				}
 				else if (current.getY() == potY + 1 && current.getX() == potX) {
 					if (previous.getOrienInt() != 1) {
-						negY = false; 
+						negY = false;
 					}
 				}
 				else if (current.getY() == potY - 1 && current.getX() == potX) {
@@ -210,7 +209,7 @@ public class Polymer {
 				System.out.println("I just checked the four orientations... ");
 				System.out.println("The boolean variables are: " + posX + " " + posY + " " + negX + " " + negY);
 				extracount++;
-				
+
 				current = current.getNext();
 				System.out.println("The curren monomer is at: " + current);
 				//Scanner console = new Scanner(System.in);
@@ -297,151 +296,7 @@ public class Polymer {
 			negX = true;
 			negY = true;
 		}
-		/*
-		int totalCount = 0;
-		this.length = 0;
-		this.root = new Monomer();
-		Monomer previous = this.root;
-		boolean firstMonomer = true;
-		boolean canAddMonomer = true;
-		while (canAddMonomer && totalCount < 1000) {
-			Monomer current = this.root;
-			//we calculate the potential coordinates of where the monomer would be located
-			//we check if one of the four locations is available (update canAddMonomer)
-			//if it is, we create a monomer and try to add it (within a loop, since we need to do this until we find a match)
-			double potentialX = Math.rint(previous.getXCoor() + Math.rint(Math.cos(previous.getAngle())));
-			double potentialY = Math.rint(previous.getYCoor() + Math.rint(Math.sin(previous.getAngle())));
-			System.out.println(current.getXCoor() + " : " + current.getYCoor() + " : " + current.getNext());
-			System.out.println(potentialX + " : " + potentialY);
-			int count = 0;
-			boolean posX = true;
-			boolean negX = true;
-			boolean posY = true;
-			boolean negY = true;
 
-			while ( (current != null && (posX == true || negX == true || posY == true || negY == true))) {
-				count++;
-				firstMonomer = false;
-				if (Math.abs(current.getXCoor() - potentialX) < 0.2 && Math.abs(current.getYCoor() - potentialY) < 0.2) {
-					posX = false;
-					negX = false;
-					posY = false;
-					negY = false;
-				}
-				//System.out.println("Is " + (current.getXCoor() - (potentialX + 1)) + " close to 0?");
-				else if (Math.sqrt(Math.pow(current.getYCoor() - potentialY,2)) < 0.2 && (current.getXCoor() - (potentialX + 1)) > -0.2 && (current.getXCoor() - (potentialX + 1)) < 0.2) {
-					System.out.println(count + "YES. +++XXX Px is " + potentialX + " ; Cx is " + current.getXCoor() + " ; Px + 1 is " + (potentialX + 1));
-					count++;
-					posX = false;
-				}
-				//System.out.println("Is " + (current.getXCoor() - (potentialX - 1)) + " close to 0?");
-				else if (Math.sqrt(Math.pow(current.getYCoor() - potentialY,2)) < 0.2 && (current.getXCoor() - (potentialX - 1)) > -0.2 && (current.getXCoor() - (potentialX - 1)) < 0.2) {
-					System.out.println(count + "YES. ---XXX Px is " + potentialX + " ; Cx is " + current.getXCoor() + " ; Px - 1 is " + (potentialX - 1));
-					count++;
-					negX = false;
-				}
-				//System.out.println("Is " + (current.getYCoor() - (potentialY + 1)) + " close to 0?");
-				else if (Math.sqrt(Math.pow(current.getXCoor() - potentialX,2)) < 0.2 && (current.getYCoor() - (potentialY + 1)) > -0.2 && (current.getYCoor() - (potentialY + 1)) < 0.2) {
-					System.out.println(count + "+++YYY Py is " + potentialY + " ; Cy is " + current.getYCoor() + " ; Py + 1 is " + (potentialY + 1));
-					count++;
-					posY = false;
-				}
-				//System.out.println("Is " + (current.getYCoor() - (potentialY - 1)) + " close to 0?");
-				else if (Math.sqrt(Math.pow(current.getXCoor() - potentialX,2)) < 0.2 && (current.getYCoor() - (potentialY - 1)) > -0.2 && (current.getYCoor() - (potentialY - 1)) < 0.2) {
-					System.out.println(count + "---YYY Py is " + potentialY + " ; Cy is " + current.getYCoor() + " ; Py - 1 is " + (potentialY - 1));
-					count++;
-					negY = false;
-				}
-
-				current = current.getNext();
-
-			}
-			count = 0;
-			Scanner console = new Scanner(System.in);
-			System.out.println("XXXXX");
-			//int x = console.nextInt();
-			//console.close();
-			if (posX == false && negX == false && posY == false && negY == false) {
-				canAddMonomer = false;
-				System.out.println(posX +" "+ negX +" "+ posY +" "+ negY);
-				return;
-			}
-
-			else {
-				boolean checking = true;
-				Monomer newMonomer = new Monomer();
-				while (checking) {
-
-
-					//check if orientation is valid, if so exit this loop, if not, create a new monomer
-					if (newMonomer.getAngle() < 0.2 && posX == true) { //this orientation is valid... for a new monomer
-						//but not all monomer positions are valid... 
-						System.out.println("Psss... pos-x!");
-
-						//but then i need to check if the monomer we will be creating
-						//is valid and allowed. If not, we need to create a new angle.
-						System.out.println("Hey it's pos-x!");
-						previous.setNext(newMonomer);
-						newMonomer.setPrevious(previous);
-						newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),true);
-						this.length++;
-						previous = newMonomer;
-						checking = false;
-						//break;
-
-					}
-					else if ((newMonomer.getAngle() - 0.5*Math.PI) > -0.2 && (newMonomer.getAngle() - 0.5*Math.PI) < 0.2 && posY == true) {
-						System.out.println("Psss... pos-y!");
-
-						System.out.println("Hey it's pos-y!");
-						previous.setNext(newMonomer);
-						newMonomer.setPrevious(previous);
-						newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),true);
-						this.length++;
-						previous = newMonomer;
-						checking = false;
-						//break;
-
-					}
-					else if ((newMonomer.getAngle() - Math.PI) > -0.2 && (newMonomer.getAngle() - Math.PI) < 0.2 && negX == true) {
-						System.out.println("Psss... neg-x!");
-
-						System.out.println("Hey it's neg-x!");
-						previous.setNext(newMonomer);
-						newMonomer.setPrevious(previous);
-						newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),true);
-						this.length++;
-						previous = newMonomer;
-						checking = false;
-						//break;
-
-					}
-					else if ((newMonomer.getAngle() - 1.5*Math.PI) > -0.2 && (newMonomer.getAngle() - 1.5*Math.PI) < 0.2 && negY == true) {
-						System.out.println("Psss... neg-y!");
-
-						System.out.println("Hey it's neg-y!");
-						previous.setNext(newMonomer);
-						newMonomer.setPrevious(previous);
-						newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),true);
-						this.length++;
-						previous = newMonomer;
-						checking = false;
-						//break;
-
-					}
-					else {
-						newMonomer.setNewAngleNON();
-					}
-
-
-				}
-			}
-			//posX  = true;
-			//posY = true;
-			//negX = true;
-			//negY = true;
-			//System.out.println(previous.getXCoor() + " : " + previous.getYCoor() + " ....... " + totalCount++);
-		} */
 	}
 
 	public int getLength() {
@@ -455,6 +310,30 @@ public class Polymer {
 			System.out.println(current);
 			current = current.getNext();
 		}
+	}
+
+	public double[] getFinalPositions() {
+		double[] finalPositions;
+		if (this.root.getDimension() == 2 || this.root.getDimension() == 1) {
+			finalPositions = new double[2];
+		}
+		else {
+			finalPositions = new double[3];
+		}
+
+		Monomer current = this.root;
+		while (current != null) {
+			if (current.getNext() == null) {
+				current.setCoordinates(current.getXCoor(), current.getYCoor());
+				finalPositions[0] = current.getXCoor();
+				finalPositions[1] = current.getYCoor();
+				if (current.getDimension() == 3) {
+					finalPositions[2] = current.getZCoor();
+				}
+			}
+			current = current.getNext();
+		}
+		return finalPositions;
 	}
 
 	public double[] printChain(String name) throws FileNotFoundException {
@@ -482,7 +361,6 @@ public class Polymer {
 				}
 			}
 			current = current.getNext();
-
 		}
 		outEXTRA.close();
 		return finalPositions;
@@ -690,20 +568,14 @@ public class Polymer {
 	}
 
 	public double det(double[][] b) {
-
 		Array2DRowRealMatrix theMatrix = new Array2DRowRealMatrix(b);
 		EigenDecomposition theEigenMatrix = new EigenDecomposition(theMatrix);
 		return theEigenMatrix.getDeterminant();
-
 	}
 
 	public double trace(double[][] covarianceTensor) {
-
 		double result = covarianceTensor[0][0] + covarianceTensor[1][1] + covarianceTensor[2][2];
 		return result;
-
 	}
-
-
 
 }

@@ -16,4 +16,22 @@ The simulation itself is a Java program. The user can specify in the code the nu
 
 Download all java classes included in this repository. You will need:
 
-1. 
+1. SimulationController.java
+2. Polymer.java
+3. Monomer.java
+
+Then update the final variables and run the program.
+
+```java
+public static final String OUTPUT_FILE_NAME = "details-positions.csv";
+public static final String FINAL_POSITIONS_FILE_NAME = "final-positions.csv";
+
+public static final int LENGTH_OF_POLYMERS = 1000;
+public static final int NUMBER_OF_POLYMERS = 10;
+```
+
+The output will be saved to the specified files.
+
+## Sample Image
+
+Images can be generated using the coordinates of all the monomers in the polymer. Here is a screenshot of an animation that shows the growth of a flexible polymer, following its characteristic random walk.
