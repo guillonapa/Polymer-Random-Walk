@@ -61,8 +61,9 @@ public class Polymer {
 		HashSet<Pair<Integer, Integer>> vertices = new HashSet<>();
 		vertices.add(root.getHeadCoors());
 		vertices.add(root.getTailCoors());
-		Monomer current = root;
 
+		Monomer current = root;
+		int length = 1;
 		for (int i = 0; i < size; i++) {
 			ArrayList<Pair<Integer, Integer>> availableVertices = findAvailableVertices(current.getTailCoors(), vertices);
 			if (availableVertices.isEmpty()) {
@@ -76,9 +77,11 @@ public class Polymer {
 			next.setPrevious(current);
 			vertices.add(next.getHeadCoors());
 			vertices.add(next.getTailCoors());
+			length += 1;
 			current = next;
 		}
 
+		this.length = length;
 		return root;
 	}
 
@@ -115,7 +118,7 @@ public class Polymer {
 	 * @return a random vertex
 	 */
 	private Pair<Integer, Integer> getRandomVertex(ArrayList<Pair<Integer, Integer>> availableVertices) {
-		int index = (int) Math.random() * availableVertices.size();
+		int index = (int) (Math.random() * availableVertices.size());
 		return availableVertices.get(index);
 	}
 
@@ -164,7 +167,7 @@ public class Polymer {
 	/**
 	 * Print the polymer to the console.
 	 */
-	public void printPolymer() throws FileNotFoundException  {
+	public void printPolymer() {
 		printPolymer(System.out);
 	}
 
@@ -174,7 +177,7 @@ public class Polymer {
 	 * @param stream the PrintStream to use
 	 * @throws FileNotFoundException
 	 */
-	public void printPolymer(final PrintStream stream) throws FileNotFoundException {
+	public void printPolymer(final PrintStream stream) {
 		if (root.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
 			stream.println("x-coordinate, y-coordinate, z-coordinate");
 		} else {
