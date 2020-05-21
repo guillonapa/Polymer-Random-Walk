@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 public enum MonomerDimension {
 

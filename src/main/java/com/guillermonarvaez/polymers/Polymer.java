@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;

@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.EigenDecomposition;

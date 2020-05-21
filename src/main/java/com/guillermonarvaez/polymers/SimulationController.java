@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
@@ -7,8 +7,8 @@ public class SimulationController {
 
     public static final String OUTPUT_FILE_NAME = "details-positions.csv";
 
-    public static final int LENGTH_OF_POLYMERS = 1000;
-    public static final int NUMBER_OF_POLYMERS = 10;
+    public static final int LENGTH_OF_POLYMERS = 100;
+    public static final int NUMBER_OF_POLYMERS = 5;
 
     public static final String OUTPUT_FILE_COLUMN_HEADERS = "Radius 'a', Radius 'b', Orientation, End-to-end Radius, Gyration Radius, COM-X, COM-Y, Final-X, Final-Y";
 
@@ -16,15 +16,17 @@ public class SimulationController {
      * Remember to update the final variables before running the program
      */
     public static void main(String[] args) throws FileNotFoundException {
-        PrintStream details = new PrintStream(OUTPUT_FILE_NAME);
-        details.println(OUTPUT_FILE_COLUMN_HEADERS);
+        PrintStream stream = System.out; //new PrintStream(OUTPUT_FILE_NAME);
+        stream.println(OUTPUT_FILE_COLUMN_HEADERS);
         for (int polymerIndex = 1; polymerIndex <= NUMBER_OF_POLYMERS; polymerIndex++) {
             for (int j = 1; j <= LENGTH_OF_POLYMERS; j++) {
-                Polymer tempPoly = new Polymer(MonomerDimension.TWO_DIMENSIONAL, LENGTH_OF_POLYMERS);
-                printStatisticsToFile(polymerIndex, tempPoly, details); // EXTRACT AND PRINT STATISTICS
+                Polymer polymer = new Polymer(MonomerDimension.TWO_DIMENSIONAL, LENGTH_OF_POLYMERS);
+                printStatisticsToFile(polymerIndex, polymer, stream); // EXTRACT AND PRINT STATISTICS
             }
         }
-        details.close();
+        if (stream != System.out) {
+            stream.close();
+        }
     }
 
     /**

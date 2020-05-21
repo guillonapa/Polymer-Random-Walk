@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 import org.apache.commons.math3.util.Pair;
 
@@ -11,6 +11,7 @@ public class Monomer {
     private final MonomerDimension dimension;
     
     // the orientation
+    private RectangularMonomerOrientation rectangularOrientation;
     private MonomerOrientation orientation;
 
     // exact coordinates (two and three dimensional)
@@ -35,16 +36,10 @@ public class Monomer {
      */
     public Monomer(final MonomerDimension dimension) {
         this.dimension = dimension;
-        switch (dimension) {
-            case TWO_DIMENSIONAL_RECTANGULAR:
-                orientation = MonomerOrientation.randomRectangularOrientation();
-                break;
-            case TWO_DIMENSIONAL:
-                orientation = MonomerOrientation.PLANAR;
-                break;
-            case THREE_DIMENSIONAL:
-                orientation = MonomerOrientation.SPHERICAL;
-                break;
+        if (dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
+            rectangularOrientation = RectangularMonomerOrientation.randomRectangularOrientation();
+        } else {
+            orientation = new MonomerOrientation();
         }
     }
 
@@ -116,7 +111,7 @@ public class Monomer {
      * Set a new random rectangular orientation.
      */
     public void setNewRectangularOrientation() {
-        orientation = MonomerOrientation.randomRectangularOrientation();
+        rectangularOrientation = RectangularMonomerOrientation.randomRectangularOrientation();
     }
 
      /**
@@ -126,13 +121,13 @@ public class Monomer {
         int tailX = nextVertex.getFirst();
         int tailY = nextVertex.getSecond();
         if (tailX > xCoorInt) {
-            orientation = MonomerOrientation.X_POSITIVE;
+            rectangularOrientation = RectangularMonomerOrientation.X_POSITIVE;
         } else if (tailX < xCoorInt) {
-            orientation = MonomerOrientation.X_NEGATIVE;
+            rectangularOrientation = RectangularMonomerOrientation.X_NEGATIVE;
         } else if (tailY > yCoorInt) {
-            orientation = MonomerOrientation.Y_POSITIVE;
+            rectangularOrientation = RectangularMonomerOrientation.Y_POSITIVE;
         } else if (tailY < yCoorInt) {
-            orientation = MonomerOrientation.Y_NEGATIVE;
+            rectangularOrientation = RectangularMonomerOrientation.Y_NEGATIVE;
         }
     }
     
@@ -145,8 +140,8 @@ public class Monomer {
      * 
      * @return the monomer's rectangular orientation.
      */
-    public MonomerOrientation getRectangularOrientation() {
-        return orientation;
+    public RectangularMonomerOrientation getRectangularOrientation() {
+        return rectangularOrientation;
     }
 
     /**
@@ -176,7 +171,7 @@ public class Monomer {
      * coordinates and orientation.
      */
     public Pair<Integer, Integer> getTailCoors() {
-        switch (orientation) {
+        switch (rectangularOrientation) {
             case X_POSITIVE:
                 return new Pair<Integer,Integer>(getX() + 1, getY());
             case Y_POSITIVE:

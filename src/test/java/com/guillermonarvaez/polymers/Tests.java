@@ -1,4 +1,4 @@
-package com.guillermonarvaez;
+package com.guillermonarvaez.polymers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
