@@ -12,7 +12,7 @@ We explore flexible polymers in solution and particles undergoing Brownian motio
 
 The paper can be found [here](https://guillonapa.github.io/pages/pdf-views/random-walks.html).
 
-## The Code
+## Code
 
 The simulation itself is a Java program that can be used to generate random walks and statistical measurements of the generated random walks.
 
@@ -42,7 +42,7 @@ $ mvn package
 
 This will generate two `jars`, one with the required dependencies included in the `jar`, the other one without them.
 
-## The Simulation
+## Simulations Usage
 
 As an example, the coordinates of all the monomers in the polymer can be used to simulate a random walk. In this example the simulations were used to generate images of flexible polymers of distinct lengths, such as the one shown below.
 
