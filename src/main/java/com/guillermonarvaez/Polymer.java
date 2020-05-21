@@ -24,7 +24,7 @@ public class Polymer {
 				previous.setNext(current); //set next
 				current.setPrevious(previous); //set previous
 				//then set the coordinates
-				current.setCoordinates(previous.getXCoor(),previous.getYCoor());
+				current.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor());
 				//then update the length
 				this.length++;
 				//then update current
@@ -38,7 +38,7 @@ public class Polymer {
 				Monomer current = new Monomer(MonomerDimension.THREE_DIMENSIONAL);
 				previous.setNext(current);
 				current.setPrevious(previous);
-				current.setCoordinates(previous.getXCoor(),previous.getYCoor(),previous.getZCoor());
+				current.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor(),previous.getZCoor());
 				this.length++;
 				previous = current;
 			}
@@ -59,8 +59,8 @@ public class Polymer {
 			//we calculate the potential coordinates of where the monomer would be located
 			//we check if one of the four locations is available (update canAddMonomer)
 			//if it is, we create a monomer and try to add it (within a loop, since we need to do this until we find a match)
-			double potentialX = previous.getXCoor() + Math.rint(Math.cos(previous.getAngle()));
-			double potentialY = previous.getYCoor() + Math.rint(Math.sin(previous.getAngle()));
+			double potentialX = previous.getXCoor() + Math.rint(Math.cos(previous.getPlaneAngle()));
+			double potentialY = previous.getYCoor() + Math.rint(Math.sin(previous.getPlaneAngle()));
 			int count = 0;
 			boolean posX = true;
 			boolean negX = true;
@@ -68,20 +68,20 @@ public class Polymer {
 			boolean negY = true;
 			while (current != null && count < 4) {
 
-				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getAngle() > -0.5 && current.getAngle() < 0.5) || (current.getXCoor() == potentialX + 1 && current.getYCoor() == potentialY && current.getAngle() > 2.8 && current.getAngle() < 3.5)) {
+				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getPlaneAngle() > -0.5 && current.getPlaneAngle() < 0.5) || (current.getXCoor() == potentialX + 1 && current.getYCoor() == potentialY && current.getPlaneAngle() > 2.8 && current.getPlaneAngle() < 3.5)) {
 					count++;
 					posX = false;
 				}
-				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getAngle() > 2.8 && current.getAngle() < 3.5) || (current.getXCoor() == potentialX - 1 && current.getYCoor() == potentialY && current.getAngle() > -0.5 && current.getAngle() < 0.5)) {
+				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getPlaneAngle() > 2.8 && current.getPlaneAngle() < 3.5) || (current.getXCoor() == potentialX - 1 && current.getYCoor() == potentialY && current.getPlaneAngle() > -0.5 && current.getPlaneAngle() < 0.5)) {
 					count++;
 					negX = false;
 				}
-				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getAngle() > 1.2 && current.getAngle() < 1.8) || (current.getXCoor() == potentialX && current.getYCoor() == potentialY + 1 && current.getAngle() > 4.3 && current.getAngle() < 5.3)) {
+				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getPlaneAngle() > 1.2 && current.getPlaneAngle() < 1.8) || (current.getXCoor() == potentialX && current.getYCoor() == potentialY + 1 && current.getPlaneAngle() > 4.3 && current.getPlaneAngle() < 5.3)) {
 					count++;
 					posY = false;
 				}
 
-				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getAngle() > 4.3 && current.getAngle() < 5.3) || (current.getXCoor() == potentialX && current.getYCoor() == potentialY - 1 && current.getAngle() > 1.2 && current.getAngle() < 1.8)) {
+				if ((current.getXCoor() == potentialX && current.getYCoor() == potentialY && current.getPlaneAngle() > 4.3 && current.getPlaneAngle() < 5.3) || (current.getXCoor() == potentialX && current.getYCoor() == potentialY - 1 && current.getPlaneAngle() > 1.2 && current.getPlaneAngle() < 1.8)) {
 					count++;
 					negY = false;
 				}
@@ -97,41 +97,41 @@ public class Polymer {
 				while (true) {
 					Monomer newMonomer = new Monomer();
 					//check if orientation is valid, if so exit this loop, if not, create a new monomer
-					if (newMonomer.getAngle() == 0) {
+					if (newMonomer.getPlaneAngle() == 0) {
 						if (posX == true) {
 							previous.setNext(newMonomer);
 							newMonomer.setPrevious(previous);
-							newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),1);
+							newMonomer.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor(),1);
 							this.length++;
 							previous = newMonomer;
 							break;
 						}
 					}
-					else if (newMonomer.getAngle() == 0.5*Math.PI) {
+					else if (newMonomer.getPlaneAngle() == 0.5*Math.PI) {
 						if (posY == true) {
 							previous.setNext(newMonomer);
 							newMonomer.setPrevious(previous);
-							newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),2);
+							newMonomer.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor(),2);
 							this.length++;
 							previous = newMonomer;
 							break;
 						}
 					}
-					else if (newMonomer.getAngle() == Math.PI) {
+					else if (newMonomer.getPlaneAngle() == Math.PI) {
 						if (negX == true) {
 							previous.setNext(newMonomer);
 							newMonomer.setPrevious(previous);
-							newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),3);
+							newMonomer.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor(),3);
 							this.length++;
 							previous = newMonomer;
 							break;
 						}
 					}
-					else if (newMonomer.getAngle() == 1.5*Math.PI) {
+					else if (newMonomer.getPlaneAngle() == 1.5*Math.PI) {
 						if (negY == true) {
 							previous.setNext(newMonomer);
 							newMonomer.setPrevious(previous);
-							newMonomer.setCoordinates(previous.getXCoor(),previous.getYCoor(),4);
+							newMonomer.setCoorsFromPrev(previous.getXCoor(),previous.getYCoor(),4);
 							this.length++;
 							previous = newMonomer;
 							break;
@@ -161,49 +161,49 @@ public class Polymer {
 			//First I calculate the starting point (potX, potY)
 			int potX = previous.getX();
 			int potY = previous.getY();
-			System.out.println("\nPotx and poty are " + potX + " - " + potY + "\nand orient " + previous.getOrienInt() + "\n");
-			switch (previous.getOrienInt()) {
-				case 0:
+			System.out.println("\nPotx and poty are " + potX + " - " + potY + "\nand orient " + previous.getRectangularOrientation() + "\n");
+			switch (previous.getRectangularOrientation()) {
+				case X_POSITIVE:
 					potX += 1;
 					break;
-				case 1:
+				case Y_POSITIVE:
 					potY += 1;
 					break;
-				case 2:
+				case X_NEGATIVE:
 					potX += -1;
 					break;
-				case 3:
+				case Y_NEGATIVE:
 					potY += -1;
 					break;
 			}
-			System.out.println("\nPotx and poty are " + potX + " - " + potY + "\nand orient " + previous.getOrienInt() + "\n");
+			System.out.println("\nPotx and poty are " + potX + " - " + potY + "\nand orient " + previous.getRectangularOrientation() + "\n");
 
 			//then i need to check if any of the monomers occupy the surrounding veritces...
 			Monomer current = this.root;
 			int extracount = 0;
 			while (extracount < 100 && current != null && (posX == true || posY == true || negX == true || negY == true)) {
-				System.out.println("This.root is equal to " + this.root + " with orientation " + this.root.getOrienInt());
+				System.out.println("This.root is equal to " + this.root + " with orientation " + this.root.getRectangularOrientation());
 				System.out.println("checking for surrounding vertices...");
 				System.out.println("Previous monomer is " + previous);
 				System.out.println("Initilly the current monomer is at: " + current);
 				System.out.println("And the boolean variables are: " + posX + " " + posY + " " + negX + " " + negY);
 				if (current.getX() == potX + 1 && current.getY() == potY) {
-					if (previous.getOrienInt() != 0) {
+					if (previous.getRectangularOrientation() != MonomerOrientation.X_POSITIVE) {
 						negX = false; //correct
 					}
 				}
 				else if (current.getX() == potX - 1 && current.getY() == potY) {
-					if (previous.getOrienInt() != 2) {
+					if (previous.getRectangularOrientation() != MonomerOrientation.X_NEGATIVE) {
 						posX = false; //correct
 					}
 				}
 				else if (current.getY() == potY + 1 && current.getX() == potX) {
-					if (previous.getOrienInt() != 1) {
+					if (previous.getRectangularOrientation() != MonomerOrientation.Y_POSITIVE) {
 						negY = false;
 					}
 				}
 				else if (current.getY() == potY - 1 && current.getX() == potX) {
-					if (previous.getOrienInt() != 3) {
+					if (previous.getRectangularOrientation() != MonomerOrientation.Y_NEGATIVE) {
 						posY = false;
 					}
 				}
@@ -225,14 +225,14 @@ public class Polymer {
 				Monomer newMonomer = new Monomer();
 				//then check if it's orientation is valid and change it if not
 				boolean isOrienValid = false;
-				int currOrien = newMonomer.getOrienInt();
+				MonomerOrientation currOrien = newMonomer.getRectangularOrientation();
 				while (isOrienValid == false) {
 					System.out.println("Finding the correct orientation for new monomer... And adding Monomer...");
 					switch (currOrien) {
-					case 0:
+					case X_POSITIVE:
 						if (posX == false) {
-							newMonomer.setNewOrienInt();
-							currOrien = newMonomer.getOrienInt();
+							newMonomer.setNewRectangularOrientation();
+							currOrien = newMonomer.getRectangularOrientation();
 						}
 						else {
 							//we add our monomer
@@ -244,10 +244,10 @@ public class Polymer {
 							isOrienValid = true;
 						}
 						break;
-					case 1:
+					case Y_POSITIVE:
 						if (posY == false) {
-							newMonomer.setNewOrienInt();
-							currOrien = newMonomer.getOrienInt();
+							newMonomer.setNewRectangularOrientation();
+							currOrien = newMonomer.getRectangularOrientation();
 						}
 						else {
 							//we add our monomer
@@ -259,10 +259,10 @@ public class Polymer {
 							isOrienValid = true;
 						}
 						break;
-					case 2:
+					case X_NEGATIVE:
 						if (negX == false) {
-							newMonomer.setNewOrienInt();
-							currOrien = newMonomer.getOrienInt();
+							newMonomer.setNewRectangularOrientation();
+							currOrien = newMonomer.getRectangularOrientation();
 						}
 						else {
 							//we add our monomer
@@ -274,10 +274,10 @@ public class Polymer {
 							isOrienValid = true;
 						}
 						break;
-					case 3:
+					case Y_NEGATIVE:
 						if (negY == false) {
-							newMonomer.setNewOrienInt();
-							currOrien = newMonomer.getOrienInt();
+							newMonomer.setNewRectangularOrientation();
+							currOrien = newMonomer.getRectangularOrientation();
 						}
 						else {
 							//we add our monomer
@@ -325,7 +325,7 @@ public class Polymer {
 		Monomer current = this.root;
 		while (current != null) {
 			if (current.getNext() == null) {
-				current.setCoordinates(current.getXCoor(), current.getYCoor());
+				current.setCoorsFromPrev(current.getXCoor(), current.getYCoor());
 				finalPositions[0] = current.getXCoor();
 				finalPositions[1] = current.getYCoor();
 				if (current.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
@@ -354,7 +354,7 @@ public class Polymer {
 		while (current != null) {
 			outEXTRA.println(current);
 			if (current.getNext() == null) {
-				current.setCoordinates(current.getXCoor(), current.getYCoor());
+				current.setCoorsFromPrev(current.getXCoor(), current.getYCoor());
 				finalPositions[0] = current.getXCoor();
 				finalPositions[1] = current.getYCoor();
 				if (current.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {

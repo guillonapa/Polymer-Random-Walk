@@ -4,6 +4,9 @@ public class Monomer {
     
     // monomer's dimension
     private final MonomerDimension dimension;
+    
+    // the orientation
+    private MonomerOrientation orientation;
 
     // exact coordinates (two and three dimensional)
     private double xCoor;
@@ -13,15 +16,6 @@ public class Monomer {
     // rectangular coordinates
     private int xCoorInt;
     private int yCoorInt;
-
-    // ???
-    private int orienInt;
-
-    // angle from the x-axis in x-y plane ???
-    private double angle;
-
-    // angle from the x-y plane ???
-    private double secAngle;
 
     // linked list references
     private Monomer previous;
@@ -36,12 +30,16 @@ public class Monomer {
      */
     public Monomer(final MonomerDimension dimension) {
         this.dimension = dimension;
-        angle = Math.random() * 2 * Math.PI;
-        if (dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
-            orienInt = (int) (Math.random() * 4);
-        }
-        if (dimension == MonomerDimension.THREE_DIMENSIONAL) {
-            secAngle = Math.random() * Math.PI;
+        switch (dimension) {
+            case TWO_DIMENSIONAL_RECTANGULAR:
+                orientation = MonomerOrientation.randomRectangularOrientation();
+                break;
+            case TWO_DIMENSIONAL:
+                orientation = MonomerOrientation.PLANAR;
+                break;
+            case THREE_DIMENSIONAL:
+                orientation = MonomerOrientation.SPHERICAL;
+                break;
         }
     }
 
@@ -52,105 +50,160 @@ public class Monomer {
         this(MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR);
     }
 
-    // --- setters ---
+    // --- setters --- //
 
+    /**
+     * Set the coordinates of the monomer.
+     * 
+     * @param xCoorInt the x coordinate
+     * @param yCoorInt the y coordinate
+     */
     public void setCoors(final int xCoorInt, final int yCoorInt) {
         this.xCoorInt = xCoorInt;
         this.yCoorInt = yCoorInt;
     }
 
-    public void setCoordinates(final double prevX, final double prevY) {
-        this.xCoor = prevX + Math.cos(this.angle);
-        this.yCoor = prevY + Math.sin(this.angle);
+    /**
+     * Set the new coordinates from the previous monomer's coordinates
+     * and this monomer's orientation angle.
+     * 
+     * @param prevX the previous monomer's x coordinate
+     * @param prevY the previous monomer's y coordinate
+     */
+    public void setCoorsFromPrev(final double prevX, final double prevY) {
+        xCoor = prevX + Math.cos(orientation.getPlaneAngle());
+        yCoor = prevY + Math.sin(orientation.getPlaneAngle());
     }
 
-    public void setCoordinates(final double prevX, final double prevY, final boolean hey) {
-        this.xCoor = prevX + Math.rint(Math.cos(this.angle));
-        this.yCoor = prevY + Math.rint(Math.sin(this.angle));
+    /**
+     * Set the new coordinates from the previous monomer's coordinates
+     * and this monomer's orientation angles.
+     * 
+     * @param prevX the previous monomer's x coordinate
+     * @param prevY the previous monomer's y coordinate
+     * @param prevZ the previous monomer's z coordinate
+     */
+    public void setCoorsFromPrev(final double prevX, final double prevY, final double prevZ) {
+        xCoor = prevX + Math.sin(orientation.getNormalAngle()) * Math.cos(orientation.getPlaneAngle());
+        yCoor = prevY + Math.sin(orientation.getNormalAngle()) * Math.sin(orientation.getPlaneAngle());
+        zCoor = prevZ + Math.cos(orientation.getNormalAngle());
     }
 
-    public void setCoordinates(final double prevX, final double prevY, final double prevZ) {
-        this.xCoor = prevX + Math.sin(this.secAngle) * Math.cos(this.angle);
-        this.yCoor = prevY + Math.sin(this.secAngle) * Math.sin(this.angle);
-        this.zCoor = prevZ + Math.cos(this.secAngle);
-    }
-
-    public void setXCoor(final double xCoor) {
-        this.xCoor = xCoor;
-    }
-
-    public void setYCoor(final double yCoor) {
-        this.yCoor = yCoor;
-    }
-
-    public void setZCoor(final double zCoor) {
-        this.zCoor = zCoor;
-    }
-
-    public void setNewAngle() {
-        this.angle = Math.random() * 2 * Math.PI;
-    }
-
-    public void setNewOrienInt() {
-        this.orienInt = (int) (Math.random() * 4);
-    }
-
-    public void setNewSecAngle() {
-        this.secAngle = Math.random() * Math.PI;
-    }
-
+    /**
+     * Set the reference to the previous monomer.
+     * 
+     * @param previous the previous monomer
+     */
     public void setPrevious(final Monomer previous) {
         this.previous = previous;
     }
-
+    
+    /**
+     * Set the reference to the next monomer.
+     * 
+     * @param next the next monomer
+     */
     public void setNext(final Monomer next) {
         this.next = next;
     }
+
+    /**
+     * Set a new random rectangular orientation.
+     */
+    public void setNewRectangularOrientation() {
+        orientation = MonomerOrientation.randomRectangularOrientation();
+    }
     
+    // --- getters --- //
+
+    /**
+     * Returns the monomer's rectangular orientation. This can be pointing
+     * in the direction of the positive x-axis, the positive y-axis, the
+     * negative x-axis, or the negative y-axis.
+     * 
+     * @return the monomer's rectangular orientation.
+     */
+    public MonomerOrientation getRectangularOrientation() {
+        return orientation;
+    }
+
+    /**
+     * Get the x coordinate (rectangular).
+     */
     public int getX() {
     	return this.xCoorInt;
     }
     
+    /**
+     * Get the y coordinate (rectangular).
+     */
     public int getY() {
     	return this.yCoorInt;
     }
-    
-    public int getOrienInt() {
-    	return this.orienInt;
-    }
 
+    /**
+     * Get the monomer's dimension.
+     */
     public MonomerDimension getDimension() {
-        return this.dimension;
+        return dimension;
     }
 
+    /**
+     * Get the x coordinate.
+     */
     public double getXCoor() {
         return this.xCoor;
     }
 
+    /**
+     * Get the y coordinate.
+     */
     public double getYCoor() {
         return this.yCoor;
     }
 
+    /**
+     * Get the z coordinate.
+     */
     public double getZCoor() {
         return this.zCoor;
     }
 
-    public double getAngle() {
-        return this.angle;
+    /**
+     * Get the orientation of the monomer in the x-y plane
+     * (angle from the x-axis).
+     */
+    public double getPlaneAngle() {
+        return orientation.getPlaneAngle();
     }
 
-    public double getSecAngle() {
-        return this.secAngle;
+    /**
+     * Get the angle from the z-axis (normal to the x-y plane).
+     */
+    public double getNormalAngle() {
+        return orientation.getNormalAngle();
     }
 
+    /**
+     * Get the previous monomer linked to this one (if any).
+     */
     public Monomer getPrevious() {
         return this.previous;
     }
 
+    /**
+     * Get the next monomer linked to this one (if any).
+     */
     public Monomer getNext() {
         return this.next;
     }
 
+    // --- utilities --- //
+
+    /**
+     * Return a string representation of the monomer: a comma-delimited string
+     * with the coordinates of the monomer.
+     */
     public String toString() {
         switch (dimension) {
             case TWO_DIMENSIONAL_RECTANGULAR:
