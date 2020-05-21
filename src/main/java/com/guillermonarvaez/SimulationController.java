@@ -1,3 +1,5 @@
+package com.guillermonarvaez;
+
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
@@ -24,7 +26,7 @@ public class SimulationController {
     details.println(OUTPUT_FILE_COLUMN_HEADERS);
     for(int currPolymer = 1; currPolymer <= NUMBER_OF_POLYMERS; currPolymer++) {
     	for(int j = 1; j <= LENGTH_OF_POLYMERS; j++) {
-      	Polymer tempPoly = new Polymer(2,LENGTH_OF_POLYMERS); // Inititlaize the 2D polymer
+      	Polymer tempPoly = new Polymer(MonomerDimension.TWO_DIMENSIONAL, LENGTH_OF_POLYMERS); // Inititlaize the 2D polymer
         printStatisticsToFile(currPolymer, tempPoly, details); // EXTRACT AND PRINT STATISTICS
       }
     }
@@ -42,7 +44,7 @@ public class SimulationController {
     details.print(temp[0] + ", " + temp[1] + ", " + temp[2] + ", " ); // print the radii data
     double[] tempCOM = tempPoly.getCOM(); // get the center of mass
     details.print(tempPoly.getEndToEndCircle() + ", " + tempPoly.getGyrationRadius() + ", "); // print end-to-end-circle and gyration-radius
-    details.print(tempCOM[0] + ", " + tempCOM[1] + ", ") // print the center of mass
+    details.print(tempCOM[0] + ", " + tempCOM[1] + ", "); // print the center of mass
     double[] finalPositions = tempPoly.getFinalPositions(); // gets the final positions of the polymer
     details.println(finalPositions[0] + ", " + finalPositions[1]); // print the final position
   }

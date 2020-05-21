@@ -1,5 +1,6 @@
+package com.guillermonarvaez;
+
 import java.io.*;
-import java.util.Scanner;
 
 import org.apache.commons.math3.linear.*;
 
@@ -13,13 +14,13 @@ public class Polymer {
 	//METHODS
 
 	//Constructor
-	public Polymer(int dimension, int numMonomers) {
+	public Polymer(MonomerDimension dimension, int numMonomers) {
 		this.length = 0;
-		if (dimension == 2) {
-			this.root = new Monomer(2);
+		if (dimension == MonomerDimension.TWO_DIMENSIONAL) {
+			this.root = new Monomer(MonomerDimension.TWO_DIMENSIONAL);
 			Monomer previous = this.root;
 			for (int i = 0; i < numMonomers; i++) { //to initialize a chain of length numMonomers
-				Monomer current = new Monomer(2);
+				Monomer current = new Monomer(MonomerDimension.TWO_DIMENSIONAL);
 				previous.setNext(current); //set next
 				current.setPrevious(previous); //set previous
 				//then set the coordinates
@@ -30,11 +31,11 @@ public class Polymer {
 				previous = current;
 			}
 		}
-		else if (dimension == 3) {
-			this.root = new Monomer(3);
+		else if (dimension == MonomerDimension.THREE_DIMENSIONAL) {
+			this.root = new Monomer(MonomerDimension.THREE_DIMENSIONAL);
 			Monomer previous = this.root;
 			for (int i = 0; i < numMonomers; i++) {
-				Monomer current = new Monomer(3);
+				Monomer current = new Monomer(MonomerDimension.THREE_DIMENSIONAL);
 				previous.setNext(current);
 				current.setPrevious(previous);
 				current.setCoordinates(previous.getXCoor(),previous.getYCoor(),previous.getZCoor());
@@ -314,7 +315,7 @@ public class Polymer {
 
 	public double[] getFinalPositions() {
 		double[] finalPositions;
-		if (this.root.getDimension() == 2 || this.root.getDimension() == 1) {
+		if (root.getDimension() == MonomerDimension.TWO_DIMENSIONAL || this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 			finalPositions = new double[2];
 		}
 		else {
@@ -327,7 +328,7 @@ public class Polymer {
 				current.setCoordinates(current.getXCoor(), current.getYCoor());
 				finalPositions[0] = current.getXCoor();
 				finalPositions[1] = current.getYCoor();
-				if (current.getDimension() == 3) {
+				if (current.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
 					finalPositions[2] = current.getZCoor();
 				}
 			}
@@ -340,7 +341,7 @@ public class Polymer {
 		PrintStream outEXTRA = new PrintStream(name);
 
 		double[] finalPositions;
-		if (this.root.getDimension() == 2 || this.root.getDimension() == 1) {
+		if (this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL || this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 			outEXTRA.println("x-coordinate, y-coordinate");
 			finalPositions = new double[2];
 		}
@@ -356,7 +357,7 @@ public class Polymer {
 				current.setCoordinates(current.getXCoor(), current.getYCoor());
 				finalPositions[0] = current.getXCoor();
 				finalPositions[1] = current.getYCoor();
-				if (current.getDimension() == 3) {
+				if (current.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
 					finalPositions[2] = current.getZCoor();
 				}
 			}
@@ -450,7 +451,7 @@ public class Polymer {
 
 	public double[][] getCovarianceTensor() {
 
-		if (this.root.getDimension() == 2 || this.root.getDimension() == 1) {
+		if (this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL || this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 
 			double[] theCOM = getCOM();
 
@@ -528,7 +529,7 @@ public class Polymer {
 
 	public double[] getRadii() {
 
-		if (this.root.getDimension() == 2 || this.root.getDimension() == 1) {
+		if (this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL || this.root.getDimension() == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 
 			Array2DRowRealMatrix theMatrix2 = new Array2DRowRealMatrix(getCovarianceTensor());
 			//System.out.println(theMatrix2);
