@@ -164,7 +164,7 @@ public class Polymer {
 	/**
 	 * Print the polymer to the console.
 	 */
-	public void printPolymer() {
+	public void printPolymer() throws FileNotFoundException  {
 		printPolymer(System.out);
 	}
 
