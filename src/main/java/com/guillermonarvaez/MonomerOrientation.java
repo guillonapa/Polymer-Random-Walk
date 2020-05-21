@@ -50,18 +50,32 @@ public enum MonomerOrientation {
         }
     }
 
+    /**
+     * Generates a new plane angle (along the x-y plane) for this
+     * orientation.
+     */
     public void generateRandomPlaneAngle() {
         planeAngle = Math.random() * 2 * Math.PI;
     }
 
+    /**
+     * Generates a new normal angle (from the z-axis) for this
+     * orientation.
+     */
     public void generateRandomNormalAngle() {
         normalAngle = Math.random() * Math.PI;
     }
 
+    /**
+     * Get the angle from the x-axis in x-y plane.
+     */
     public double getPlaneAngle() {
         return planeAngle;
     }
 
+    /**
+     * Get the angle from the z-axis (normal to the x-y plane).
+     */
     public double getNormalAngle() {
         return normalAngle;
     }

@@ -1,5 +1,10 @@
 package com.guillermonarvaez;
 
+import org.apache.commons.math3.util.Pair;
+
+/**
+ * A representation of a monomer.
+ */
 public class Monomer {
     
     // monomer's dimension
@@ -113,6 +118,23 @@ public class Monomer {
     public void setNewRectangularOrientation() {
         orientation = MonomerOrientation.randomRectangularOrientation();
     }
+
+     /**
+     * Set a new random rectangular orientation.
+     */
+    public void setNewRectangularOrientation(Pair<Integer, Integer> nextVertex) {
+        int tailX = nextVertex.getFirst();
+        int tailY = nextVertex.getSecond();
+        if (tailX > xCoorInt) {
+            orientation = MonomerOrientation.X_POSITIVE;
+        } else if (tailX < xCoorInt) {
+            orientation = MonomerOrientation.X_NEGATIVE;
+        } else if (tailY > yCoorInt) {
+            orientation = MonomerOrientation.Y_POSITIVE;
+        } else if (tailY < yCoorInt) {
+            orientation = MonomerOrientation.Y_NEGATIVE;
+        }
+    }
     
     // --- getters --- //
 
@@ -139,6 +161,34 @@ public class Monomer {
      */
     public int getY() {
     	return this.yCoorInt;
+    }
+
+    /**
+     * Get a pair representing the start of this monomer, using its current
+     * coordinates.
+     */
+    public Pair<Integer, Integer> getHeadCoors() {
+        return new Pair<Integer,Integer>(getX(), getY());
+    }
+
+    /**
+     * Get a pair representing the end of this monomer, using its current
+     * coordinates and orientation.
+     */
+    public Pair<Integer, Integer> getTailCoors() {
+        switch (orientation) {
+            case X_POSITIVE:
+                return new Pair<Integer,Integer>(getX() + 1, getY());
+            case Y_POSITIVE:
+                return new Pair<Integer,Integer>(getX(), getY() + 1);
+            case X_NEGATIVE:
+                return new Pair<Integer,Integer>(getX() - 1, getY());
+            case Y_NEGATIVE:
+                return new Pair<Integer,Integer>(getX(), getY() - 1);
+            default:
+                break;
+        }
+        return null;
     }
 
     /**
