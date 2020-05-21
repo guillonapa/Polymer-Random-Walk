@@ -7,9 +7,8 @@ import org.apache.commons.math3.linear.RealVector;
 public class PolymerAnalyzer {
 
     /**
-     * 
-     * @param polymer
-     * @return
+     * The end-to-end radius consists of the distance between the first
+     * and last monomers of the polymer.
      */
     public static double getEndToEndCircle(Polymer polymer) {
         // get the root
@@ -29,8 +28,7 @@ public class PolymerAnalyzer {
 	}
 
     /**
-     * 
-     * @return
+     * The gyration radius is a more general measure of the spread of the polymer.
      */
 	public static double getGyrationRadius(Polymer polymer) {
 		final double[] theCOM = getCOM(polymer);
@@ -58,8 +56,7 @@ public class PolymerAnalyzer {
 	}
 
     /**
-     * 
-     * @return
+     * Calculate the center of mass.
      */
 	public static double[] getCOM(Polymer polymer) {
 		int numMonomers = 0;
@@ -84,8 +81,7 @@ public class PolymerAnalyzer {
     }
 
     /**
-     * 
-     * @return
+     * Get the radii.
      */
 	public static double[] getRadii(Polymer polymer) {
         MonomerDimension dimension = polymer.getRoot().getDimension();
