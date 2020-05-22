@@ -6,30 +6,31 @@ import org.apache.commons.math3.linear.RealVector;
 
 public class PolymerAnalyzer {
 
-    /**
-     * The end-to-end radius consists of the distance between the first
-     * and last monomers of the polymer.
-     */
-    public static double getEndToEndCircle(Polymer polymer) {
-        // get the root
+	/**
+	 * The end-to-end radius consists of the distance between the first and last
+	 * monomers of the polymer.
+	 */
+	public static double getEndToEndCircle(Polymer polymer) {
+		// get the root
 		Monomer current = polymer.getRoot();
 		final double xCoor = current.getXCoor();
 		final double yCoor = current.getYCoor();
-        final double zCoor = current.getZCoor();
-        // go to the last monomer
+		final double zCoor = current.getZCoor();
+		// go to the last monomer
 		while (current.getNext() != null) {
 			current = current.getNext();
 		}
-        // calculate the result
+		// calculate the result
 		final double finalXCoor = current.getXCoor();
 		final double finalYCoor = current.getYCoor();
 		final double finalZCoor = current.getZCoor();
-		return (Math.sqrt(Math.pow(finalXCoor - xCoor, 2) + Math.pow(finalYCoor - yCoor, 2) + Math.pow(finalZCoor - zCoor, 2)));
+		return (Math.sqrt(
+				Math.pow(finalXCoor - xCoor, 2) + Math.pow(finalYCoor - yCoor, 2) + Math.pow(finalZCoor - zCoor, 2)));
 	}
 
-    /**
-     * The gyration radius is a more general measure of the spread of the polymer.
-     */
+	/**
+	 * The gyration radius is a more general measure of the spread of the polymer.
+	 */
 	public static double getGyrationRadius(Polymer polymer) {
 		final double[] theCOM = getCOM(polymer);
 		int numMonomers = 0;
@@ -55,15 +56,15 @@ public class PolymerAnalyzer {
 		return Math.sqrt(rSquared);
 	}
 
-    /**
-     * Calculate the center of mass.
-     */
+	/**
+	 * Calculate the center of mass.
+	 */
 	public static double[] getCOM(Polymer polymer) {
 		int numMonomers = 0;
 		double xDisp = 0;
 		double yDisp = 0;
-        double zDisp = 0;
-        
+		double zDisp = 0;
+
 		Monomer current = polymer.getRoot();
 		while (current != null) {
 			xDisp += current.getXCoor();
@@ -78,30 +79,31 @@ public class PolymerAnalyzer {
 		results[1] = yDisp / numMonomers;
 		results[2] = zDisp / numMonomers;
 		return results;
-    }
+	}
 
-    /**
-     * Get the radii.
-     */
+	/**
+	 * Get the radii.
+	 */
 	public static double[] getRadii(Polymer polymer) {
-        MonomerDimension dimension = polymer.getRoot().getDimension();
-		if (dimension == MonomerDimension.TWO_DIMENSIONAL || dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
+		MonomerDimension dimension = polymer.getRoot().getDimension();
+		if (dimension == MonomerDimension.TWO_DIMENSIONAL
+				|| dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 			final Array2DRowRealMatrix theMatrix2 = new Array2DRowRealMatrix(getCovarianceTensor(polymer));
 			final EigenDecomposition theEigenMatrix2 = new EigenDecomposition(theMatrix2);
 			final double[] doubleCheckEV2 = theEigenMatrix2.getRealEigenvalues();
 			final RealVector eVector2 = theEigenMatrix2.getEigenvector(0);
-            
-            final double[] result = new double[3];
+
+			final double[] result = new double[3];
 			result[0] = Math.sqrt(doubleCheckEV2[0]);
 			result[1] = Math.sqrt(doubleCheckEV2[1]);
 			result[2] = Math.acos(eVector2.getEntry(0));
 			return result;
 		} else {
-            final Array2DRowRealMatrix theMatrix = new Array2DRowRealMatrix(getCovarianceTensor(polymer));
+			final Array2DRowRealMatrix theMatrix = new Array2DRowRealMatrix(getCovarianceTensor(polymer));
 			final EigenDecomposition theEigenMatrix = new EigenDecomposition(theMatrix);
 			final RealVector eVector = theEigenMatrix.getEigenvector(0);
 			final double[] doubleCheckEV = theEigenMatrix.getRealEigenvalues();
-            
+
 			final double[] result = new double[5];
 			result[0] = doubleCheckEV[0];
 			result[1] = doubleCheckEV[1];
@@ -112,11 +114,12 @@ public class PolymerAnalyzer {
 		}
 	}
 
-    // --- utilities --- // 
+	// --- utilities --- //
 
 	private static double[][] getCovarianceTensor(Polymer polymer) {
-        MonomerDimension dimension = polymer.getRoot().getDimension();
-		if (dimension == MonomerDimension.TWO_DIMENSIONAL || dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
+		MonomerDimension dimension = polymer.getRoot().getDimension();
+		if (dimension == MonomerDimension.TWO_DIMENSIONAL
+				|| dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
 			final double[] theCOM = getCOM(polymer);
 			int numMonomers = 0;
 			double xDisp = 0;
@@ -137,8 +140,8 @@ public class PolymerAnalyzer {
 			results[1][1] = (yDisp / numMonomers);
 			results[0][1] = (xyDisp / numMonomers);
 			results[1][0] = (xyDisp / numMonomers);
-            return results; // this is the covariance tensor
-            
+			return results; // this is the covariance tensor
+
 		} else {
 			final double[] theCOM = getCOM(polymer);
 			int numMonomers = 0;
@@ -175,13 +178,13 @@ public class PolymerAnalyzer {
 		}
 	}
 
-	private static double det(final double[][] b) {
+	public static double det(final double[][] b) {
 		final Array2DRowRealMatrix theMatrix = new Array2DRowRealMatrix(b);
 		final EigenDecomposition theEigenMatrix = new EigenDecomposition(theMatrix);
 		return theEigenMatrix.getDeterminant();
 	}
 
-	private static double trace(final double[][] covarianceTensor) {
+	public static double trace(final double[][] covarianceTensor) {
 		final double result = covarianceTensor[0][0] + covarianceTensor[1][1] + covarianceTensor[2][2];
 		return result;
 	}
