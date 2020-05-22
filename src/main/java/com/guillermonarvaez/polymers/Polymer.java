@@ -17,6 +17,8 @@ public class Polymer {
 
 	// the root of the polymer
 	private Monomer root;
+	// the tail of the polymer
+	private Monomer tail;
 	// the length of the polymer
 	private int length;
 
@@ -28,7 +30,7 @@ public class Polymer {
 	 */
 	public Polymer(final MonomerDimension dimension, final int size) {
 		if (dimension == MonomerDimension.TWO_DIMENSIONAL_RECTANGULAR) {
-			root = generateRectangularPolymer(size);
+			generateRectangularPolymer(size);
 		} else {
 			root = new Monomer(dimension);
 			Monomer previous = root;
@@ -44,6 +46,7 @@ public class Polymer {
 				}
 				previous = current;
 			}
+			tail = previous;
 			length = size;
 		}
 	}
@@ -80,8 +83,8 @@ public class Polymer {
 			length += 1;
 			current = next;
 		}
-
 		this.length = length;
+		tail = current;
 		return root;
 	}
 
@@ -142,26 +145,21 @@ public class Polymer {
 	 * coordinates where the last monomer starts from.
 	 */
 	public double[] getFinalPositions() {
-		double[] finalPositions;
-		if (root.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
-			finalPositions = new double[3];
-		} else {
-			finalPositions = new double[2];
+		MonomerDimension dimension = root.getDimension();
+		Monomer placeholder = new Monomer(dimension);
+		switch (dimension) {
+			case TWO_DIMENSIONAL_RECTANGULAR:
+				Pair<Integer, Integer> endpoints = tail.getTailCoors();
+				return new double[] { endpoints.getFirst(), endpoints.getSecond() };
+			case TWO_DIMENSIONAL:
+				placeholder.setCoorsFromPrev(tail.getXCoor(), tail.getYCoor());
+				return new double[] { placeholder.getXCoor(), placeholder.getYCoor() };
+			case THREE_DIMENSIONAL:
+				placeholder.setCoorsFromPrev(tail.getXCoor(), tail.getYCoor(), tail.getZCoor());
+				return new double[] { placeholder.getXCoor(), placeholder.getYCoor(), placeholder.getZCoor() };
+			default:
+				return null;
 		}
-
-		Monomer current = this.root;
-		while (current != null) {
-			if (current.getNext() == null) {
-				current.setCoorsFromPrev(current.getXCoor(), current.getYCoor());
-				finalPositions[0] = current.getXCoor();
-				finalPositions[1] = current.getYCoor();
-				if (current.getDimension() == MonomerDimension.THREE_DIMENSIONAL) {
-					finalPositions[2] = current.getZCoor();
-				}
-			}
-			current = current.getNext();
-		}
-		return finalPositions;
 	}
 
 	/**
